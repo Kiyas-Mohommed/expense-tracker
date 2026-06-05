@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Modern Expense Tracker - Track your income and expenses efficiently">
+    <title>Expense Tracker - Manage Your Finances</title>
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230d6efd'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-family='Arial, sans-serif' font-weight='bold'%3E💰%3C/text%3E%3C/svg%3E">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <!-- FullCalendar for calendar view -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-wallet2"></i> <span data-i18n="nav.brand">Expense Tracker</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">
+                            <i class="bi bi-house-door"></i> <span data-i18n="nav.dashboard">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#transactions" data-bs-toggle="modal"
+                            data-bs-target="#transactionsModal">
+                            <i class="bi bi-list-ul"></i> <span data-i18n="nav.allTransactions">All Transactions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#notebook" data-bs-toggle="modal" data-bs-target="#notebookModal">
+                            <i class="bi bi-journal-text"></i> <span data-i18n="nav.notebook">Notebook</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#settings" data-bs-toggle="modal" data-bs-target="#settingsModal">
+                            <i class="bi bi-gear"></i> <span data-i18n="nav.settings">Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container-fluid py-4">
+
+        <!-- Summary Cards Section -->
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="card summary-card income-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="card-subtitle mb-2 text-muted" data-i18n="summary.totalIncome">Total Income
+                                </h6>
+                                <h3 class="card-title mb-0" id="totalIncome">$0.00</h3>
+                            </div>
+                            <div class="summary-icon income-icon">
+                                <i class="bi bi-arrow-down-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="card summary-card expense-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="card-subtitle mb-2 text-muted" data-i18n="summary.totalExpenses">Total
+                                    Expenses</h6>
+                                <h3 class="card-title mb-0" id="totalExpense">$0.00</h3>
+                            </div>
+                            <div class="summary-icon expense-icon">
+                                <i class="bi bi-arrow-up-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="card summary-card balance-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="card-subtitle mb-2 text-muted" data-i18n="summary.balance">Balance</h6>
+                                <h3 class="card-title mb-0" id="balance">$0.00</h3>
+                            </div>
+                            <div class="summary-icon balance-icon">
+                                <i class="bi bi-wallet2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="card summary-card budget-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="card-subtitle mb-2 text-muted" data-i18n="summary.monthlyBudget">Monthly
+                                    Budget</h6>
+                                <h3 class="card-title mb-0" id="budgetAmount">$2000</h3>
+                            </div>
+                            <div class="summary-icon budget-icon">
+                                <i class="bi bi-piggy-bank"></i>
+                            </div>
+                        </div>
+                        <div class="progress mt-3" style="height: 8px;">
+                            <div class="progress-bar" id="budgetProgress" role="progressbar" style="width: 0%"
+                                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <small class="text-muted" id="budgetText">$0 spent</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Add and Filters Section -->
+        <div class="row g-3 mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-12 col-md-auto">
+                                <button class="btn btn-primary btn-lg w-100" data-bs-toggle="modal"
+                                    data-bs-target="#addTransactionModal">
+                                    <i class="bi bi-plus-circle"></i> <span data-i18n="btn.addTransaction">Add
+                                        Transaction</span>
+                                </button>
+                            </div>
+                            <div class="col-12 col-md-auto">
+                                <button class="btn btn-success btn-lg w-100" id="downloadReportBtn">
+                                    <i class="bi bi-file-earmark-pdf"></i> <span data-i18n="btn.downloadReport">Download
+                                        Report</span>
+                                </button>
+                            </div>
+                            <div class="col-12 col-md">
+                                <div class="row g-2">
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <select class="form-select" id="filterType">
+                                            <option value="all" data-i18n="filter.allTypes">All Types</option>
+                                            <option value="income" data-i18n="filter.incomeOnly">Income Only</option>
+                                            <option value="expense" data-i18n="filter.expensesOnly">Expenses Only
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <select class="form-select" id="filterCategory">
+                                            <option value="all" data-i18n="filter.allCategories">All Categories</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <select class="form-select" id="filterPeriod">
+                                            <option value="all" data-i18n="filter.allTime">All Time</option>
+                                            <option value="today" data-i18n="filter.today">Today</option>
+                                            <option value="week" data-i18n="filter.thisWeek">This Week</option>
+                                            <option value="month" selected data-i18n="filter.thisMonth">This Month
+                                            </option>
+                                            <option value="year" data-i18n="filter.thisYear">This Year</option>
+                                            <option value="custom" data-i18n="filter.customRange">Custom Range</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <input type="text" class="form-control" id="searchInput"
+                                            placeholder="Search transactions..." data-i18n="filter.search">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Custom Date Range (Hidden by default) -->
+                        <div class="row g-2 mt-2 d-none" id="customDateRange">
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <label class="form-label small" data-i18n="filter.fromDate">From Date</label>
+                                <input type="date" class="form-control" id="filterDateFrom">
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <label class="form-label small" data-i18n="filter.toDate">To Date</label>
+                                <input type="date" class="form-control" id="filterDateTo">
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-4 d-flex align-items-end">
+                                <button class="btn btn-secondary w-100" id="applyCustomDate"
+                                    data-i18n="btn.apply">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts and Statistics Section -->
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-lg-6">
+                <div class="card h-100">
+                    <div class="card-header bg-white">
+                        <h5 class="card-title mb-0"><i class="bi bi-pie-chart"></i> <span
+                                data-i18n="chart.expensesByCategory">Expenses by Category</span></h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="categoryChart"></canvas>
+                        <div id="noCategoryData" class="text-center text-muted py-5 d-none">
+                            <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                            <p class="mt-3" data-i18n="chart.noExpenseData">No expense data available</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="card h-100">
+                    <div class="card-header bg-white">
+                        <h5 class="card-title mb-0"><i class="bi bi-bar-chart"></i> <span
+                                data-i18n="chart.monthlyTrend">Monthly Trend</span></h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="trendChart"></canvas>
+                        <div id="noTrendData" class="text-center text-muted py-5 d-none">
+                            <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                            <p class="mt-3" data-i18n="chart.noTrendData">No trend data available</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar Section -->
+        <div class="row g-3 mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-calendar3"></i> <span data-i18n="calendar.title">Financial Calendar</span>
+                        </h5>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="legend-item d-flex align-items-center">
+                                <span class="legend-dot bg-success me-1"></span>
+                                <small data-i18n="modal.income">Income</small>
+                            </div>
+                            <div class="legend-item d-flex align-items-center">
+                                <span class="legend-dot bg-danger me-1"></span>
+                                <small data-i18n="modal.expense">Expense</small>
+                            </div>
+                            <div class="legend-item d-flex align-items-center">
+                                <span class="legend-dot bg-warning me-1"></span>
+                                <small data-i18n="calendar.reminder">Reminder</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="transactionCalendar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Transactions Section -->
+        <div class="row g-3 mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0"><i class="bi bi-clock-history"></i> <span
+                                data-i18n="table.recentTransactions">Recent Transactions</span></h5>
+                        <button class="btn btn-sm btn-outline-secondary" id="clearAllBtn">
+                            <i class="bi bi-trash"></i> <span data-i18n="btn.clearAll">Clear All</span>
+                        </button>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th data-i18n="table.date">Date</th>
+                                        <th data-i18n="table.description">Description</th>
+                                        <th data-i18n="table.category">Category</th>
+                                        <th data-i18n="table.type">Type</th>
+                                        <th class="text-end" data-i18n="table.amount">Amount</th>
+                                        <th class="text-center" data-i18n="table.actions">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transactionsList">
+                                    <tr id="noDataRow">
+                                        <td colspan="6" class="text-center py-5 text-muted">
+                                            <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                                            <p class="mt-3" data-i18n="table.noTransactions">No transactions yet. Click
+                                                "Add Transaction" to get started!
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Add/Edit Transaction Modal -->
+    <div class="modal fade" id="addTransactionModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">
+                        <i class="bi bi-plus-circle"></i> Add Transaction
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="transactionForm">
+                        <input type="hidden" id="transactionId">
+
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="modal.transactionType">Transaction Type</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="type" id="typeIncome" value="income">
+                                <label class="btn btn-outline-success" for="typeIncome">
+                                    <i class="bi bi-arrow-down-circle"></i> <span data-i18n="modal.income">Income</span>
+                                </label>
+
+                                <input type="radio" class="btn-check" name="type" id="typeExpense" value="expense"
+                                    checked>
+                                <label class="btn btn-outline-danger" for="typeExpense">
+                                    <i class="bi bi-arrow-up-circle"></i> <span data-i18n="modal.expense">Expense</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="amount" class="form-label" data-i18n="modal.amount">Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="transactionCurrencySymbol">Rs.</span>
+                                <input type="number" class="form-control" id="amount" placeholder="0.00" step="0.01"
+                                    min="0" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="category" class="form-label" data-i18n="modal.category">Category</label>
+                            <select class="form-select" id="category" required>
+                                <option value="" data-i18n="modal.selectCategory">Select a category</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label"
+                                data-i18n="modal.description">Description</label>
+                            <input type="text" class="form-control" id="description" placeholder="Enter description"
+                                data-i18n="modal.enterDescription" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="date" class="form-label" data-i18n="modal.date">Date</label>
+                            <input type="date" class="form-control" id="date" required>
+                        </div>
+
+                        <!-- Reminder Section -->
+                        <div class="mb-3 border-top pt-3">
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" id="enableReminder">
+                                <label class="form-check-label" for="enableReminder">
+                                    <i class="bi bi-bell"></i> <span data-i18n="calendar.setReminder">Set
+                                        Reminder</span>
+                                </label>
+                            </div>
+                            <div id="reminderOptions" class="d-none">
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <label for="reminderDate" class="form-label small"
+                                            data-i18n="calendar.reminderDate">Reminder Date</label>
+                                        <input type="date" class="form-control form-control-sm" id="reminderDate">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="reminderTime" class="form-label small"
+                                            data-i18n="calendar.reminderTime">Reminder Time</label>
+                                        <input type="time" class="form-control form-control-sm" id="reminderTime"
+                                            value="09:00">
+                                    </div>
+                                </div>
+                                <small class="text-muted d-block mt-1" data-i18n="calendar.reminderHelper">You'll
+                                    receive a notification at this time</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        data-i18n="btn.cancel">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveTransactionBtn">
+                        <i class="bi bi-check-circle"></i> <span data-i18n="btn.save">Save Transaction</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle text-warning"></i> <span data-i18n="delete.title">Confirm
+                            Delete</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p data-i18n="delete.message">Are you sure you want to delete this transaction?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        data-i18n="btn.cancel">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                        <i class="bi bi-trash"></i> <span data-i18n="btn.delete">Delete</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal fade" id="settingsModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-gear"></i> <span data-i18n="settings.title">Settings</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="languageSelect" class="form-label" data-i18n="settings.language">Language</label>
+                        <select class="form-select" id="languageSelect">
+                            <option value="en" selected>🇬🇧 English</option>
+                            <option value="si">🇱🇰 සිංහල (Sinhala)</option>
+                            <option value="ta">🇱🇰 தமிழ் (Tamil)</option>
+                        </select>
+                        <small class="form-text text-muted" data-i18n="settings.languageHelper">Choose your preferred
+                            language</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="currencySelect" class="form-label" data-i18n="settings.currency">Currency</label>
+                        <select class="form-select" id="currencySelect">
+                            <option value="LKR" selected>🇱🇰 Sri Lankan Rupee (Rs.)</option>
+                            <option value="USD">🇺🇸 US Dollar ($)</option>
+                            <option value="GBP">🇬🇧 British Pound (£)</option>
+                            <option value="EUR">🇪🇺 Euro (€)</option>
+                            <option value="AED">🇦🇪 UAE Dirham (د.إ)</option>
+                        </select>
+                        <small class="form-text text-muted" data-i18n="settings.currencyHelper">Select your preferred
+                            currency</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="themeSelect" class="form-label" data-i18n="settings.theme">Theme</label>
+                        <select class="form-select" id="themeSelect">
+                            <option value="light" selected data-i18n="settings.lightTheme">☀️ Light Theme</option>
+                            <option value="dark" data-i18n="settings.darkTheme">🌙 Dark Theme</option>
+                            <option value="auto" data-i18n="settings.autoTheme">🔄 Auto (System Default)</option>
+                        </select>
+                        <small class="form-text text-muted" data-i18n="settings.themeHelper">Choose your preferred
+                            theme</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="monthlyBudget" class="form-label" data-i18n="settings.monthlyBudget">Monthly
+                            Budget</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="budgetCurrencySymbol">Rs.</span>
+                            <input type="number" class="form-control" id="monthlyBudget" placeholder="100000.00"
+                                step="100" min="0">
+                        </div>
+                        <small class="form-text text-muted" data-i18n="settings.budgetHelper">Set your monthly spending
+                            limit</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" data-i18n="settings.notifications">Notifications</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="budgetAlerts" checked>
+                            <label class="form-check-label" for="budgetAlerts" data-i18n="settings.budgetAlert">
+                                Budget Alert (80% threshold)
+                            </label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="transactionNotifications" checked>
+                            <label class="form-check-label" for="transactionNotifications"
+                                data-i18n="settings.transactionNotifications">
+                                Transaction Notifications
+                            </label>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="mb-3">
+                        <label class="form-label" data-i18n="settings.categoryBudgets">Category Budgets</label>
+                        <small class="form-text text-muted d-block mb-2" data-i18n="settings.categoryBudgetsHelper">Set
+                            spending limits for each expense category</small>
+                        <div id="categoryBudgetsList" class="border rounded p-3"
+                            style="max-height: 300px; overflow-y: auto;">
+                            <!-- Category budgets will be populated here -->
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <label class="form-label mb-0" data-i18n="settings.recurringTransactions">Recurring
+                                Transactions</label>
+                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#addRecurringModal">
+                                <i class="bi bi-plus-circle"></i> <span data-i18n="btn.add">Add</span>
+                            </button>
+                        </div>
+                        <div id="recurringList" class="border rounded p-2" style="max-height: 300px; overflow-y: auto;">
+                            <!-- Recurring transactions will be listed here -->
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="mb-3">
+                        <label class="form-label" data-i18n="settings.dataManagement">Data Management</label>
+                        <div class="row g-2">
+                            <div class="col-12 col-sm-6">
+                                <button class="btn btn-outline-primary w-100" id="exportDataBtn">
+                                    <i class="bi bi-download"></i> <span data-i18n="settings.exportJSON">Export Data
+                                        (JSON)</span>
+                                </button>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <button class="btn btn-outline-secondary w-100" id="importDataBtn">
+                                    <i class="bi bi-upload"></i> <span data-i18n="settings.importData">Import
+                                        Data</span>
+                                </button>
+                            </div>
+                            <input type="file" id="importFileInput" accept=".json" class="d-none">
+                            <div class="col-12">
+                                <button class="btn btn-outline-success w-100" id="exportCSVBtn">
+                                    <i class="bi bi-file-earmark-spreadsheet"></i> <span
+                                        data-i18n="settings.exportCSV">Export as CSV</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        data-i18n="btn.close">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveSettingsBtn">
+                        <i class="bi bi-check-circle"></i> <span data-i18n="btn.saveSettings">Save Settings</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- All Transactions Modal -->
+    <div class="modal fade" id="transactionsModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-list-ul"></i> All Transactions
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light sticky-top">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Category</th>
+                                    <th>Type</th>
+                                    <th class="text-end">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allTransactionsList">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calculator Modal -->
+    <div class="modal fade" id="calculatorModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-calculator"></i> <span data-i18n="calculator.title">Calculator</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <div class="calculator">
+                        <!-- Display -->
+                        <div class="calculator-display mb-3">
+                            <div class="small text-muted text-end" id="calcHistory" style="min-height: 20px;"></div>
+                            <input type="text" class="form-control form-control-lg text-end" id="calcDisplay" value="0"
+                                readonly style="font-size: 1.5rem; font-weight: 600; background-color: #f8f9fa;">
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="calculator-buttons">
+                            <div class="row g-2 mb-2">
+                                <div class="col-3">
+                                    <button class="btn btn-light w-100 py-2" onclick="clearCalc()"
+                                        data-i18n="calculator.clear">C</button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-light w-100 py-2" onclick="deleteCalc()">
+                                        <i class="bi bi-backspace"></i>
+                                    </button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-light w-100 py-2" onclick="appendCalc('%')">%</button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-warning w-100 py-2" onclick="appendCalc('/')">÷</button>
+                                </div>
+                            </div>
+                            <div class="row g-2 mb-2">
+                                <div class="col-3">
+                                    <button class="btn btn-outline-secondary w-100 py-2"
+                                        onclick="appendCalc('7')">7</button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-outline-secondary w-100 py-2"
+                                        onclick="appendCalc('8')">8</button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-outline-secondary w-100 py-2"
+                                        onclick="appendCalc('9')">9</button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-warning w-100 py-2" onclick="appendCalc('*')">×</button>
+                                </div>
+                            </div>
+                            <div class="row g-2 mb-2">
+                                <div class="col-3">
+                                    <button class="btn btn-outline-secondary w-100 py-2"
+                                        onclick="appendCalc('4')">4</button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-outline-secondary w-100 py-2"
+                                        onclick="appendCalc('5')">5</button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-outline-secondary w-100 py-2"
+                                        onclick="appendCalc('6')">6</button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-warning w-100 py-2" onclick="appendCalc('-')">−</button>
+                                </div>
+                            </div>
+                            <div class="row g-2 mb-2">
+                                <div class="col-3">
+                                    <button class="btn btn-outline-secondary w-100 py-2"
+                                        onclick="appendCalc('1')">1</button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-outline-secondary w-100 py-2"
+                                        onclick="appendCalc('2')">2</button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-outline-secondary w-100 py-2"
+                                        onclick="appendCalc('3')">3</button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-warning w-100 py-2" onclick="appendCalc('+')">+</button>
+                                </div>
+                            </div>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <button class="btn btn-outline-secondary w-100 py-2"
+                                        onclick="appendCalc('0')">0</button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-outline-secondary w-100 py-2"
+                                        onclick="appendCalc('.')">.</button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-success w-100 py-2" onclick="calculateCalc()">=</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        data-i18n="btn.close">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="useInTransaction()">
+                        <i class="bi bi-arrow-right-circle"></i> <span data-i18n="calculator.useInTransaction">Use in
+                            Transaction</span>
+                    </button>
+                    <!-- <button type="button" class="btn btn-primary" onclick="copyToClipboard()">
+                        <i class="bi bi-clipboard"></i> <span data-i18n="calculator.copy">Copy</span>
+                    </button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Recurring Transaction Modal -->
+    <div class="modal fade" id="addRecurringModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-arrow-repeat"></i> <span data-i18n="recurring.addTitle">Add Recurring
+                            Transaction</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="recurringForm">
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="modal.transactionType">Transaction Type</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="recurringType" id="recurringIncome"
+                                    value="income">
+                                <label class="btn btn-outline-success" for="recurringIncome">
+                                    <i class="bi bi-arrow-down-circle"></i> <span data-i18n="modal.income">Income</span>
+                                </label>
+                                <input type="radio" class="btn-check" name="recurringType" id="recurringExpense"
+                                    value="expense" checked>
+                                <label class="btn btn-outline-danger" for="recurringExpense">
+                                    <i class="bi bi-arrow-up-circle"></i> <span data-i18n="modal.expense">Expense</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="recurringDescription" class="form-label"
+                                data-i18n="modal.description">Description</label>
+                            <input type="text" class="form-control" id="recurringDescription"
+                                placeholder="Enter description" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="recurringAmount" class="form-label" data-i18n="modal.amount">Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="recurringCurrencySymbol">Rs.</span>
+                                <input type="number" class="form-control" id="recurringAmount" placeholder="0.00"
+                                    step="0.01" min="0" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="recurringCategory" class="form-label"
+                                data-i18n="modal.category">Category</label>
+                            <select class="form-select" id="recurringCategory" required>
+                                <option value="" data-i18n="modal.selectCategory">Select a category</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="recurringFrequency" class="form-label"
+                                data-i18n="recurring.frequency">Frequency</label>
+                            <select class="form-select" id="recurringFrequency" required>
+                                <option value="daily" data-i18n="recurring.daily">Daily</option>
+                                <option value="weekly" data-i18n="recurring.weekly">Weekly</option>
+                                <option value="monthly" selected data-i18n="recurring.monthly">Monthly</option>
+                                <option value="yearly" data-i18n="recurring.yearly">Yearly</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="recurringStartDate" class="form-label" data-i18n="recurring.startDate">Start
+                                Date</label>
+                            <input type="date" class="form-control" id="recurringStartDate" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="recurringEndDate" class="form-label" data-i18n="recurring.endDate">End Date
+                                (Optional)</label>
+                            <input type="date" class="form-control" id="recurringEndDate">
+                            <small class="form-text text-muted" data-i18n="recurring.endDateHelper">Leave empty for no
+                                end date</small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        data-i18n="btn.cancel">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveRecurringBtn">
+                        <i class="bi bi-check-circle"></i> <span data-i18n="btn.save">Save</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Recurring Confirmation Modal -->
+    <div class="modal fade" id="deleteRecurringModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle text-warning"></i> <span data-i18n="delete.title">Confirm
+                            Delete</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p data-i18n="recurring.deleteMessage">Are you sure you want to delete this recurring transaction?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        data-i18n="btn.cancel">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteRecurringBtn">
+                        <i class="bi bi-trash"></i> <span data-i18n="btn.delete">Delete</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="position-fixed top-0 start-50 translate-middle-x p-3 toast-container-custom" style="z-index: 9999">
+        <div id="toast" class="toast align-items-center border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage">
+                    Transaction saved successfully!
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Calculator Button -->
+    <button class="floating-calc-btn" data-bs-toggle="modal" data-bs-target="#calculatorModal" title="Calculator"
+        aria-label="Open Calculator">
+        <i class="bi bi-calculator"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer class="footer mt-5 py-4 bg-dark text-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5><i class="bi bi-wallet2"></i> Expense Tracker</h5>
+                    <p class="text-muted small">Track your income and expenses efficiently. Take control of your
+                        finances with our easy-to-use expense tracking solution.</p>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h6>Quick Links</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="#" class="text-muted text-decoration-none"><i class="bi bi-house-door me-1"></i>
+                                Dashboard</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none" data-bs-toggle="modal"
+                                data-bs-target="#transactionsModal"><i class="bi bi-list-ul me-1"></i> All
+                                Transactions</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none" data-bs-toggle="modal"
+                                data-bs-target="#settingsModal"><i class="bi bi-gear me-1"></i> Settings</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6>Legal</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="privacy-policy.html" class="text-muted text-decoration-none"><i
+                                    class="bi bi-shield-check me-1"></i>
+                                Privacy Policy</a></li>
+                        <li><a href="terms-conditions.html" class="text-muted text-decoration-none"><i
+                                    class="bi bi-file-earmark-text me-1"></i> Terms & Conditions</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none"
+                                onclick="showCookieSettings(); return false;"><i class="bi bi-cookie me-1"></i> Cookie
+                                Policy</a></li>
+                        <li><a href="faq.html" class="text-muted text-decoration-none"><i
+                                    class="bi bi-question-circle me-1"></i> FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-3 border-secondary">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="small text-muted mb-0">&copy; 2025 Expense Tracker. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
+                    <a href="#" class="text-muted me-3"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-muted me-3"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#" class="text-muted me-3"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-muted"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookieConsentBanner" class="cookie-consent-banner" style="display: none;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 mb-3 mb-lg-0">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-cookie fs-3 text-warning me-3"></i>
+                        <div>
+                            <h6 class="mb-1" data-i18n="cookie.banner.title">🍪 We use cookies</h6>
+                            <p class="small mb-0" data-i18n="cookie.banner.text">We use cookies and similar technologies
+                                to enhance your browsing
+                                experience, analyze site traffic, and personalize content. By clicking "Accept All", you
+                                consent to our use of cookies. You can manage your preferences by clicking "Cookie
+                                Settings".</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+                        <button class="btn btn-outline-light btn-sm" onclick="showCookieSettings()">
+                            <i class="bi bi-gear"></i> <span data-i18n="cookie.banner.settings">Cookie Settings</span>
+                        </button>
+                        <button class="btn btn-light btn-sm" onclick="acceptEssentialCookies()"
+                            data-i18n="cookie.banner.essentialOnly">
+                            Essential Only
+                        </button>
+                        <button class="btn btn-success btn-sm" onclick="acceptAllCookies()">
+                            <i class="bi bi-check-lg"></i> <span data-i18n="cookie.banner.acceptAll">Accept All</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Settings Modal -->
+    <div class="modal fade" id="cookieSettingsModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-cookie"></i> <span data-i18n="cookie.modal.title">Cookie Policy &
+                            Settings</span>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> <span data-i18n="cookie.modal.intro">We use cookies to improve
+                            your experience. Manage your
+                            preferences below.</span>
+                    </div>
+
+                    <h6 class="text-primary mb-3" data-i18n="cookie.modal.aboutTitle">About Cookies</h6>
+                    <p class="small" data-i18n="cookie.modal.aboutText">Cookies are small text files stored on your
+                        device when you visit a website. They
+                        help us remember your preferences, understand how you use our application, and improve your
+                        overall experience.</p>
+
+                    <hr>
+
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <h6 class="mb-0"><i class="bi bi-shield-check text-success"></i> <span
+                                        data-i18n="cookie.modal.essential.title">Essential Cookies</span></h6>
+                                <small class="text-muted" data-i18n="cookie.modal.essential.subtitle">Required for the
+                                    application to function properly</small>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="essentialCookies" checked disabled>
+                                <label class="form-check-label small text-muted" for="essentialCookies"
+                                    data-i18n="cookie.modal.essential.alwaysOn">Always
+                                    On</label>
+                            </div>
+                        </div>
+                        <p class="small text-muted mb-0" data-i18n="cookie.modal.essential.text">These cookies are
+                            necessary for basic functionality such as
+                            saving your settings, preferences, and financial data locally. They cannot be disabled.</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <h6 class="mb-0"><i class="bi bi-graph-up text-primary"></i> <span
+                                        data-i18n="cookie.modal.analytics.title">Analytics Cookies</span></h6>
+                                <small class="text-muted" data-i18n="cookie.modal.analytics.subtitle">Help us understand
+                                    how you use the app</small>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="analyticsCookies">
+                            </div>
+                        </div>
+                        <p class="small text-muted mb-0" data-i18n="cookie.modal.analytics.text">These cookies help us
+                            understand how visitors interact with our
+                            application by collecting and reporting information anonymously.</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <h6 class="mb-0"><i class="bi bi-sliders text-info"></i> <span
+                                        data-i18n="cookie.modal.functional.title">Functional Cookies</span></h6>
+                                <small class="text-muted" data-i18n="cookie.modal.functional.subtitle">Enable enhanced
+                                    functionality and personalization</small>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="functionalCookies">
+                            </div>
+                        </div>
+                        <p class="small text-muted mb-0" data-i18n="cookie.modal.functional.text">These cookies enable
+                            enhanced functionality such as remembering
+                            your language preference, theme settings, and other customizations.</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <h6 class="mb-0"><i class="bi bi-megaphone text-warning"></i> <span
+                                        data-i18n="cookie.modal.marketing.title">Marketing Cookies</span></h6>
+                                <small class="text-muted" data-i18n="cookie.modal.marketing.subtitle">Used for
+                                    advertising purposes</small>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="marketingCookies">
+                            </div>
+                        </div>
+                        <p class="small text-muted mb-0" data-i18n="cookie.modal.marketing.text">These cookies may be
+                            set through our site by advertising
+                            partners to build a profile of your interests and show relevant ads on other sites.</p>
+                    </div>
+
+                    <hr>
+
+                    <div class="small text-muted">
+                        <p class="mb-2"><strong data-i18n="cookie.modal.howWeUse">How We Use Cookies:</strong></p>
+                        <ul class="mb-2">
+                            <li data-i18n="cookie.modal.useItem1">Store your preferences (theme, currency, language)
+                            </li>
+                            <li data-i18n="cookie.modal.useItem2">Remember your financial data locally</li>
+                            <li data-i18n="cookie.modal.useItem3">Analyze application usage to improve features</li>
+                            <li data-i18n="cookie.modal.useItem4">Provide a personalized experience</li>
+                        </ul>
+                        <p class="mb-0" data-i18n="cookie.modal.moreInfo">For more information, please read our full <a
+                                href="privacy-policy.html">Privacy
+                                Policy</a>.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        data-i18n="cookie.modal.cancel">Cancel</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="acceptEssentialCookies()"
+                        data-i18n="cookie.banner.essentialOnly">
+                        Essential Only
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="saveCookiePreferences()">
+                        <i class="bi bi-check-lg"></i> <span data-i18n="cookie.modal.savePreferences">Save
+                            Preferences</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notebook Modal -->
+    <div class="modal fade" id="notebookModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-journal-text"></i> <span data-i18n="notebook.title">Financial Notebook</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Notebook Toolbar -->
+                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                        <div class="d-flex gap-2 flex-wrap">
+                            <select class="form-select form-select-sm" id="notebookCategoryFilter" style="width: auto;">
+                                <option value="all" data-i18n="notebook.allCategories">All Categories</option>
+                                <option value="goal">🎯 Goals</option>
+                                <option value="reminder">⏰ Reminders</option>
+                                <option value="shopping">🛒 Shopping List</option>
+                                <option value="general">📝 General</option>
+                                <option value="budget">💰 Budget Plan</option>
+                                <option value="debt">💳 Debt Tracker</option>
+                                <option value="investment">📈 Investment</option>
+                                <option value="idea">💡 Ideas</option>
+                            </select>
+                            <div class="input-group input-group-sm" style="width: 200px;">
+                                <span style="margin-right: 5px; border-radius: 9px; cursor: pointer;"
+                                    class="input-group-text">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                                <input type="text" class="form-control" id="notebookSearch"
+                                    placeholder="Search notes..." data-i18n="notebook.searchPlaceholder">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addNoteModal">
+                            <i class="bi bi-plus-lg"></i> <span data-i18n="notebook.addNote">Add Note</span>
+                        </button>
+                    </div>
+
+                    <!-- Pinned Notes Section -->
+                    <div id="pinnedNotesSection" class="mb-3 d-none">
+                        <h6 class="text-muted mb-2"><i class="bi bi-pin-angle-fill"></i> <span
+                                data-i18n="notebook.pinnedNotes">Pinned Notes</span></h6>
+                        <div id="pinnedNotesList" class="row g-2"></div>
+                        <hr>
+                    </div>
+
+                    <!-- Notes List -->
+                    <div id="notesList" class="row g-2">
+                        <!-- Notes will be rendered here -->
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="notesEmptyState" class="text-center py-5 d-none">
+                        <i class="bi bi-journal-x display-1 text-muted"></i>
+                        <h5 class="mt-3 text-muted" data-i18n="notebook.noNotes">No notes yet</h5>
+                        <p class="text-muted" data-i18n="notebook.noNotesDesc">Start by adding your first financial
+                            note!</p>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNoteModal">
+                            <i class="bi bi-plus-lg"></i> <span data-i18n="notebook.addNote">Add Note</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Note Modal -->
+    <div class="modal fade" id="addNoteModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="noteModalTitle">
+                        <i class="bi bi-plus-circle"></i> <span data-i18n="notebook.addNote">Add Note</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="noteForm">
+                        <input type="hidden" id="noteId">
+
+                        <div class="mb-3">
+                            <label for="noteTitle" class="form-label" data-i18n="notebook.noteTitle">Title</label>
+                            <input type="text" class="form-control" id="noteTitle" placeholder="Enter note title"
+                                data-i18n="notebook.noteTitlePlaceholder" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="noteCategory" class="form-label"
+                                data-i18n="notebook.noteCategory">Category</label>
+                            <select class="form-select" id="noteCategory" required>
+                                <option value="general">📝 General</option>
+                                <option value="goal">🎯 Financial Goal</option>
+                                <option value="reminder">⏰ Reminder</option>
+                                <option value="shopping">🛒 Shopping List</option>
+                                <option value="budget">💰 Budget Plan</option>
+                                <option value="debt">💳 Debt Tracker</option>
+                                <option value="investment">📈 Investment</option>
+                                <option value="idea">💡 Ideas</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="noteContent" class="form-label" data-i18n="notebook.noteContent">Content</label>
+                            <textarea class="form-control" id="noteContent" rows="6"
+                                placeholder="Write your note here..." data-i18n="notebook.noteContentPlaceholder"
+                                required></textarea>
+                            <small class="text-muted" data-i18n="notebook.markdownSupport">Supports basic formatting
+                                with line breaks</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="notePinned">
+                                <label class="form-check-label" for="notePinned">
+                                    <i class="bi bi-pin-angle"></i> <span data-i18n="notebook.pinNote">Pin this
+                                        note</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Optional: Link to amount/budget -->
+                        <div class="mb-3" id="noteAmountSection">
+                            <label for="noteAmount" class="form-label" data-i18n="notebook.linkedAmount">Target Amount
+                                (optional)</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="noteCurrencySymbol">Rs.</span>
+                                <input type="number" class="form-control" id="noteAmount" placeholder="0.00" step="0.01"
+                                    min="0">
+                            </div>
+                            <small class="text-muted" data-i18n="notebook.linkedAmountHelper">For financial goals or
+                                budget tracking</small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        data-i18n="btn.cancel">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveNoteBtn">
+                        <i class="bi bi-check-circle"></i> <span data-i18n="btn.save">Save</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Note Confirmation Modal -->
+    <div class="modal fade" id="deleteNoteModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle text-warning"></i> <span data-i18n="delete.title">Confirm
+                            Delete</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p data-i18n="notebook.deleteConfirm">Are you sure you want to delete this note?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"
+                        data-i18n="btn.cancel">Cancel</button>
+                    <button type="button" class="btn btn-danger btn-sm" id="confirmDeleteNoteBtn">
+                        <i class="bi bi-trash"></i> <span data-i18n="btn.delete">Delete</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="app.js"></script>
+</body>
+
+</html>

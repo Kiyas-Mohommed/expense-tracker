@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Frequently Asked Questions - Expense Tracker">
+    <title data-i18n="page.title.faq">FAQ - Expense Tracker</title>
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230d6efd'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-family='Arial, sans-serif' font-weight='bold'%3E💰%3C/text%3E%3C/svg%3E">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        .faq-item {
+            border-left: 4px solid #0d6efd;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-left-color: #0a58ca;
+            background-color: rgba(13, 110, 253, 0.05);
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: rgba(13, 110, 253, 0.1);
+            color: #0d6efd;
+        }
+
+        .accordion-button:focus {
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .category-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-wallet2"></i> <span data-i18n="footer.brand">Expense Tracker</span>
+            </a>
+            <div class="d-flex align-items-center gap-2">
+                <select id="pageLangSelect" class="form-select form-select-sm bg-transparent text-white border-light"
+                    style="width: auto;">
+                    <option value="en" class="text-dark">English</option>
+                    <option value="si" class="text-dark">සිංහල</option>
+                    <option value="ta" class="text-dark">தமிழ்</option>
+                </select>
+                <a href="index.html" class="btn btn-outline-light btn-sm">
+                    <i class="bi bi-arrow-left"></i> <span data-i18n="common.backToApp">Back to App</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Header -->
+                <div class="text-center mb-5">
+                    <h1 class="text-primary mb-3">
+                        <i class="bi bi-question-circle"></i> <span data-i18n="faq.title">Frequently Asked
+                            Questions</span>
+                    </h1>
+                    <p class="lead text-muted" data-i18n="faq.subtitle">Find answers to common questions about Expense
+                        Tracker</p>
+                </div>
+
+                <!-- Search Box -->
+                <div class="card shadow-sm mb-5">
+                    <div class="card-body p-4">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text bg-white border-end-0">
+                                <i class="bi bi-search text-muted"></i>
+                            </span>
+                            <input type="text" class="form-control border-start-0" id="faqSearch"
+                                data-i18n="faq.searchPlaceholder" placeholder="Search for answers..."
+                                onkeyup="filterFAQ()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="row g-3 mb-5">
+                    <div class="col-6 col-md-3">
+                        <a href="#getting-started" class="card text-decoration-none h-100 border-0 shadow-sm">
+                            <div class="card-body text-center py-4">
+                                <i class="bi bi-rocket-takeoff fs-2 text-primary mb-2"></i>
+                                <h6 class="mb-0" data-i18n="faq.category.gettingStarted">Getting Started</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a href="#transactions" class="card text-decoration-none h-100 border-0 shadow-sm">
+                            <div class="card-body text-center py-4">
+                                <i class="bi bi-credit-card fs-2 text-success mb-2"></i>
+                                <h6 class="mb-0" data-i18n="faq.category.transactions">Transactions</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a href="#budgets" class="card text-decoration-none h-100 border-0 shadow-sm">
+                            <div class="card-body text-center py-4">
+                                <i class="bi bi-piggy-bank fs-2 text-warning mb-2"></i>
+                                <h6 class="mb-0" data-i18n="faq.category.budgets">Budgets</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a href="#data-security" class="card text-decoration-none h-100 border-0 shadow-sm">
+                            <div class="card-body text-center py-4">
+                                <i class="bi bi-shield-lock fs-2 text-danger mb-2"></i>
+                                <h6 class="mb-0" data-i18n="faq.category.dataSecurity">Data & Security</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Getting Started Section -->
+                <section id="getting-started" class="mb-5">
+                    <h3 class="text-primary mb-4">
+                        <i class="bi bi-rocket-takeoff"></i> <span data-i18n="faq.category.gettingStarted">Getting
+                            Started</span>
+                    </h3>
+                    <div class="accordion" id="gettingStartedAccordion">
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq1" data-i18n="faq.q1">
+                                    What is Expense Tracker?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse show"
+                                data-bs-parent="#gettingStartedAccordion">
+                                <div class="accordion-body">
+                                    <p>Expense Tracker is a free, easy-to-use personal finance management application
+                                        that helps you:</p>
+                                    <ul>
+                                        <li>Track your daily income and expenses</li>
+                                        <li>Categorize transactions for better organization</li>
+                                        <li>Set and monitor budgets</li>
+                                        <li>View visual reports and charts</li>
+                                        <li>Export your data for backup or analysis</li>
+                                    </ul>
+                                    <p class="mb-0">All your data is stored locally on your device, ensuring your
+                                        privacy.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq2" data-i18n="faq.q2">
+                                    Do I need to create an account?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse"
+                                data-bs-parent="#gettingStartedAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>No account required!</strong> Expense Tracker works entirely in your
+                                        browser without requiring registration or login.</p>
+                                    <p class="mb-0">Your data is stored locally using your browser's localStorage, which
+                                        means you can start tracking expenses immediately without any setup.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq3" data-i18n="faq.q3">
+                                    Is Expense Tracker free to use?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse"
+                                data-bs-parent="#gettingStartedAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Yes, completely free!</strong> Expense Tracker is 100% free to use with
+                                        no hidden costs, subscriptions, or premium features locked behind a paywall.</p>
+                                    <p class="mb-0">All features are available to everyone.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq4" data-i18n="faq.q4">
+                                    How do I get started?
+                                </button>
+                            </h2>
+                            <div id="faq4" class="accordion-collapse collapse"
+                                data-bs-parent="#gettingStartedAccordion">
+                                <div class="accordion-body">
+                                    <p>Getting started is easy:</p>
+                                    <ol>
+                                        <li><strong>Add your first transaction:</strong> Click the "Add Transaction"
+                                            button</li>
+                                        <li><strong>Choose the type:</strong> Select Income or Expense</li>
+                                        <li><strong>Fill in details:</strong> Enter amount, category, description, and
+                                            date</li>
+                                        <li><strong>Save:</strong> Click "Save Transaction"</li>
+                                    </ol>
+                                    <p class="mb-0">That's it! Your transaction will appear in the Recent Transactions
+                                        list and be reflected in your dashboard summary.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Transactions Section -->
+                <section id="transactions" class="mb-5">
+                    <h3 class="text-primary mb-4">
+                        <i class="bi bi-credit-card"></i> <span
+                            data-i18n="faq.category.transactions">Transactions</span>
+                    </h3>
+                    <div class="accordion" id="transactionsAccordion">
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq5" data-i18n="faq.q5">
+                                    How do I add a new transaction?
+                                </button>
+                            </h2>
+                            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#transactionsAccordion">
+                                <div class="accordion-body">
+                                    <p>To add a new transaction:</p>
+                                    <ol>
+                                        <li>Click the <span class="badge bg-primary"><i class="bi bi-plus-circle"></i>
+                                                Add Transaction</span> button</li>
+                                        <li>Select whether it's an <strong>Income</strong> or <strong>Expense</strong>
+                                        </li>
+                                        <li>Enter the <strong>Amount</strong></li>
+                                        <li>Choose a <strong>Category</strong> (e.g., Food, Transport, Salary)</li>
+                                        <li>Add a <strong>Description</strong> for reference</li>
+                                        <li>Select the <strong>Date</strong></li>
+                                        <li>Click <strong>Save Transaction</strong></li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq6" data-i18n="faq.q6">
+                                    Can I edit or delete a transaction?
+                                </button>
+                            </h2>
+                            <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#transactionsAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Yes!</strong> Each transaction in the Recent Transactions list has action
+                                        buttons:</p>
+                                    <ul>
+                                        <li><i class="bi bi-pencil text-primary"></i> <strong>Edit:</strong> Modify any
+                                            transaction details</li>
+                                        <li><i class="bi bi-copy text-secondary"></i> <strong>Duplicate:</strong> Create
+                                            a copy with today's date</li>
+                                        <li><i class="bi bi-trash text-danger"></i> <strong>Delete:</strong> Remove the
+                                            transaction permanently</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq7" data-i18n="faq.q7">
+                                    What categories are available?
+                                </button>
+                            </h2>
+                            <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#transactionsAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Expense Categories:</strong></p>
+                                    <p>🍔 Food, 🚗 Transport, 💡 Utilities, 🎬 Entertainment, 🛒 Shopping, 🏥 Health, 📚
+                                        Education, 🏠 Rent/Mortgage, 🛡️ Insurance, 💳 Debt/Loan, 💎 Savings/Investment,
+                                        🎁 Gifts, ✈️ Travel, 📱 Subscriptions, 💅 Personal Care</p>
+                                    <p><strong>Income Categories:</strong></p>
+                                    <p>💰 Salary, 💼 Business/Freelance, 📈 Investment, 🏘️ Rental Income, 🎉 Bonus, 🎀
+                                        Gift Received, ↩️ Refund</p>
+                                    <p class="mb-0">📦 <strong>Other:</strong> For anything that doesn't fit the above
+                                        categories</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq8" data-i18n="faq.q8">
+                                    How do recurring transactions work?
+                                </button>
+                            </h2>
+                            <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#transactionsAccordion">
+                                <div class="accordion-body">
+                                    <p>Recurring transactions automatically create new entries based on your schedule:
+                                    </p>
+                                    <ul>
+                                        <li><strong>Daily:</strong> Creates a transaction every day</li>
+                                        <li><strong>Weekly:</strong> Creates a transaction every week</li>
+                                        <li><strong>Monthly:</strong> Creates a transaction every month</li>
+                                        <li><strong>Yearly:</strong> Creates a transaction every year</li>
+                                    </ul>
+                                    <p>To set up:</p>
+                                    <ol>
+                                        <li>Go to Settings → Recurring Transactions</li>
+                                        <li>Click "Add Recurring"</li>
+                                        <li>Fill in the details and frequency</li>
+                                        <li>Set start date (and optional end date)</li>
+                                    </ol>
+                                    <p class="mb-0">You can enable/disable, edit, or delete recurring transactions at
+                                        any time.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq9" data-i18n="faq.q9">
+                                    How do I filter and search transactions?
+                                </button>
+                            </h2>
+                            <div id="faq9" class="accordion-collapse collapse" data-bs-parent="#transactionsAccordion">
+                                <div class="accordion-body">
+                                    <p>Use the filter options above the transactions list:</p>
+                                    <ul>
+                                        <li><strong>Type Filter:</strong> All, Income Only, or Expenses Only</li>
+                                        <li><strong>Category Filter:</strong> Filter by specific category</li>
+                                        <li><strong>Period Filter:</strong> Today, This Week, This Month, This Year, All
+                                            Time, or Custom Range</li>
+                                        <li><strong>Search Box:</strong> Search by description or amount</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Budgets Section -->
+                <section id="budgets" class="mb-5">
+                    <h3 class="text-primary mb-4">
+                        <i class="bi bi-piggy-bank"></i> <span data-i18n="faq.category.budgets">Budgets</span>
+                    </h3>
+                    <div class="accordion" id="budgetsAccordion">
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq10" data-i18n="faq.q10">
+                                    How do I set a monthly budget?
+                                </button>
+                            </h2>
+                            <div id="faq10" class="accordion-collapse collapse" data-bs-parent="#budgetsAccordion">
+                                <div class="accordion-body">
+                                    <p>To set your monthly budget:</p>
+                                    <ol>
+                                        <li>Click the <i class="bi bi-gear"></i> <strong>Settings</strong> icon in the
+                                            navigation</li>
+                                        <li>Find the <strong>Monthly Budget</strong> field</li>
+                                        <li>Enter your desired budget amount</li>
+                                        <li>Click <strong>Save Settings</strong></li>
+                                    </ol>
+                                    <p class="mb-0">Your budget progress will be displayed on the dashboard with a
+                                        visual progress bar.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq11" data-i18n="faq.q11">
+                                    Can I set budgets for individual categories?
+                                </button>
+                            </h2>
+                            <div id="faq11" class="accordion-collapse collapse" data-bs-parent="#budgetsAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Yes!</strong> You can set individual budgets for each expense category:
+                                    </p>
+                                    <ol>
+                                        <li>Go to <strong>Settings</strong></li>
+                                        <li>Scroll to <strong>Category Budgets</strong> section</li>
+                                        <li>Enter budget amounts for each category you want to track</li>
+                                        <li>Save your settings</li>
+                                    </ol>
+                                    <p class="mb-0">You'll receive alerts when you reach 80%, 90%, or exceed your
+                                        category budgets.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq12" data-i18n="faq.q12">
+                                    What do the budget alerts mean?
+                                </button>
+                            </h2>
+                            <div id="faq12" class="accordion-collapse collapse" data-bs-parent="#budgetsAccordion">
+                                <div class="accordion-body">
+                                    <p>Budget alerts notify you about your spending:</p>
+                                    <ul>
+                                        <li><span class="badge bg-info">ℹ️ 80% Used</span> - You've used 80% of your
+                                            budget</li>
+                                        <li><span class="badge bg-warning text-dark">⚠️ 90% Used</span> - Warning:
+                                            approaching your limit</li>
+                                        <li><span class="badge bg-danger">⚠️ Exceeded</span> - You've gone over your
+                                            budget</li>
+                                    </ul>
+                                    <p class="mb-0">You can enable or disable budget alerts in Settings → Notifications.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Data & Security Section -->
+                <section id="data-security" class="mb-5">
+                    <h3 class="text-primary mb-4">
+                        <i class="bi bi-shield-lock"></i> <span data-i18n="faq.category.dataSecurity">Data &
+                            Security</span>
+                    </h3>
+                    <div class="accordion" id="dataSecurityAccordion">
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq13" data-i18n="faq.q13">
+                                    Where is my data stored?
+                                </button>
+                            </h2>
+                            <div id="faq13" class="accordion-collapse collapse" data-bs-parent="#dataSecurityAccordion">
+                                <div class="accordion-body">
+                                    <p>Your data is stored <strong>locally on your device</strong> using your browser's
+                                        localStorage.</p>
+                                    <div class="alert alert-success">
+                                        <i class="bi bi-check-circle"></i> <strong>Benefits:</strong>
+                                        <ul class="mb-0 mt-2">
+                                            <li>Your financial data never leaves your device</li>
+                                            <li>No server or cloud storage involved</li>
+                                            <li>Complete privacy and control over your data</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq14" data-i18n="faq.q14">
+                                    How do I backup my data?
+                                </button>
+                            </h2>
+                            <div id="faq14" class="accordion-collapse collapse" data-bs-parent="#dataSecurityAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Regular backups are recommended!</strong> To export your data:</p>
+                                    <ol>
+                                        <li>Go to <strong>Settings</strong></li>
+                                        <li>Scroll to <strong>Data Management</strong></li>
+                                        <li>Click <strong>Export Data (JSON)</strong> for a complete backup</li>
+                                        <li>Or click <strong>Export as CSV</strong> for spreadsheet compatibility</li>
+                                    </ol>
+                                    <div class="alert alert-warning">
+                                        <i class="bi bi-exclamation-triangle"></i> <strong>Important:</strong> Clearing
+                                        your browser data or using private/incognito mode will remove your stored data.
+                                        Always keep backups!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq15" data-i18n="faq.q15">
+                                    How do I restore my data from a backup?
+                                </button>
+                            </h2>
+                            <div id="faq15" class="accordion-collapse collapse" data-bs-parent="#dataSecurityAccordion">
+                                <div class="accordion-body">
+                                    <p>To restore data from a JSON backup:</p>
+                                    <ol>
+                                        <li>Go to <strong>Settings</strong></li>
+                                        <li>Click <strong>Import Data</strong></li>
+                                        <li>Select your backup JSON file</li>
+                                        <li>Your data will be restored automatically</li>
+                                    </ol>
+                                    <p class="mb-0"><strong>Note:</strong> Importing will replace all existing data with
+                                        the backup data.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq16" data-i18n="faq.q16">
+                                    Can I use Expense Tracker on multiple devices?
+                                </button>
+                            </h2>
+                            <div id="faq16" class="accordion-collapse collapse" data-bs-parent="#dataSecurityAccordion">
+                                <div class="accordion-body">
+                                    <p>Since data is stored locally, it doesn't automatically sync between devices.
+                                        However, you can manually transfer data:</p>
+                                    <ol>
+                                        <li><strong>Export</strong> your data from the first device (JSON format)</li>
+                                        <li>Transfer the file to your other device (email, cloud storage, USB, etc.)
+                                        </li>
+                                        <li><strong>Import</strong> the file on the second device</li>
+                                    </ol>
+                                    <p class="mb-0">Repeat this process whenever you want to sync your data between
+                                        devices.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq17" data-i18n="faq.q17">
+                                    Is my financial data secure?
+                                </button>
+                            </h2>
+                            <div id="faq17" class="accordion-collapse collapse" data-bs-parent="#dataSecurityAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Yes!</strong> Your data security is ensured by:</p>
+                                    <ul>
+                                        <li><strong>Local Storage:</strong> Data never leaves your device</li>
+                                        <li><strong>No External Transmission:</strong> We don't send your data to any
+                                            servers</li>
+                                        <li><strong>No Third-Party Access:</strong> Your financial information isn't
+                                            shared with anyone</li>
+                                        <li><strong>Browser Security:</strong> Protected by your browser's security
+                                            measures</li>
+                                    </ul>
+                                    <p class="mb-0">For more details, please read our <a
+                                            href="privacy-policy.html">Privacy Policy</a>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Additional Questions Section -->
+                <section id="additional" class="mb-5">
+                    <h3 class="text-primary mb-4">
+                        <i class="bi bi-plus-circle"></i> <span data-i18n="faq.category.additional">Additional
+                            Questions</span>
+                    </h3>
+                    <div class="accordion" id="additionalAccordion">
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq18" data-i18n="faq.q18">
+                                    Can I change the currency?
+                                </button>
+                            </h2>
+                            <div id="faq18" class="accordion-collapse collapse" data-bs-parent="#additionalAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Yes!</strong> Expense Tracker supports multiple currencies:</p>
+                                    <ul>
+                                        <li>🇱🇰 Sri Lankan Rupee (Rs.)</li>
+                                        <li>🇺🇸 US Dollar ($)</li>
+                                        <li>🇬🇧 British Pound (£)</li>
+                                        <li>🇪🇺 Euro (€)</li>
+                                        <li>🇦🇪 UAE Dirham (د.إ)</li>
+                                    </ul>
+                                    <p class="mb-0">Change your currency in Settings → Currency.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq19" data-i18n="faq.q19">
+                                    Is there a dark mode?
+                                </button>
+                            </h2>
+                            <div id="faq19" class="accordion-collapse collapse" data-bs-parent="#additionalAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Yes!</strong> Expense Tracker offers three theme options:</p>
+                                    <ul>
+                                        <li>☀️ <strong>Light Theme:</strong> Classic light appearance</li>
+                                        <li>🌙 <strong>Dark Theme:</strong> Easy on the eyes in low light</li>
+                                        <li>🔄 <strong>Auto:</strong> Follows your system preference</li>
+                                    </ul>
+                                    <p class="mb-0">Change your theme in Settings → Theme.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq20" data-i18n="faq.q20">
+                                    How do I use the calculator feature?
+                                </button>
+                            </h2>
+                            <div id="faq20" class="accordion-collapse collapse" data-bs-parent="#additionalAccordion">
+                                <div class="accordion-body">
+                                    <p>A built-in calculator is available for quick calculations:</p>
+                                    <ul>
+                                        <li>Click the <i class="bi bi-calculator"></i> floating calculator button
+                                            (bottom right)</li>
+                                        <li>Perform your calculations</li>
+                                        <li>Use the result directly in a new transaction</li>
+                                    </ul>
+                                    <p class="mb-0">Perfect for splitting bills or calculating totals before adding
+                                        transactions!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item faq-item mb-3 border rounded shadow-sm">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq21" data-i18n="faq.q21">
+                                    Can I download reports?
+                                </button>
+                            </h2>
+                            <div id="faq21" class="accordion-collapse collapse" data-bs-parent="#additionalAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Yes!</strong> You can download your financial reports:</p>
+                                    <ul>
+                                        <li>Click the <strong>Download Report</strong> button on the dashboard</li>
+                                        <li>An HTML report will be generated with your summary, charts, and transactions
+                                        </li>
+                                        <li>Open it in any browser or print it as PDF</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Still Need Help -->
+                <div class="card bg-primary text-white shadow">
+                    <div class="card-body text-center py-5">
+                        <i class="bi bi-headset fs-1 mb-3"></i>
+                        <h4 data-i18n="faq.stillNeedHelp">Still have questions?</h4>
+                        <p class="mb-4" data-i18n="faq.stillNeedHelpText">Can't find what you're looking for? We're here
+                            to help!</p>
+                        <a href="mailto:support@expensetracker.com" class="btn btn-light btn-lg">
+                            <i class="bi bi-envelope"></i> <span data-i18n="faq.contactSupport">Contact Support</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer py-4 bg-dark text-light mt-5">
+        <div class="container text-center">
+            <p class="small text-muted mb-0" data-i18n="common.copyright">&copy; 2025 Expense Tracker. All rights
+                reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Pages i18n -->
+    <script src="pages-i18n.js"></script>
+
+    <script>
+        // FAQ Search Functionality
+        function filterFAQ() {
+            const searchTerm = document.getElementById('faqSearch').value.toLowerCase();
+            const accordionItems = document.querySelectorAll('.accordion-item');
+
+            accordionItems.forEach(item => {
+                const question = item.querySelector('.accordion-button').textContent.toLowerCase();
+                const answer = item.querySelector('.accordion-body').textContent.toLowerCase();
+
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
